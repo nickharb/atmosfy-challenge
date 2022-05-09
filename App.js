@@ -44,19 +44,20 @@ const App = () => {
             {/*Slider with max, min, step and initial value*/}
             <Slider
                 style={styles.slider}
-                maximumValue={1}
-                minimumValue={0}
+                maximumValue={1000}
+                minimumValue={1}
                 minimumTrackTintColor='blue'
                 maximumTrackTintColor='#000000'
-                // step={1}
+                step={1}
                 value={sliderValue}
                 onValueChange={(sliderValue) => {
-                    setSliderValue(sliderValue * status.durationMillis)
-                    video.current.setPositionAsync(sliderValue * status.durationMillis)
+                    // setSliderValue(sliderValue * status.durationMillis)
+                    // video.current.setPositionAsync(sliderValue * status.durationMillis)
+                    video.current.setPositionAsync(sliderValue)
                 }}
             />
             
-            {/*<View style={styles.imageSlider}>
+            <View style={styles.imageSlider}>
                 <View style={styles.thumbnailContainer}>
                     <View style={styles.imageSliderThumbnail}></View>
                     <View style={styles.imageSliderThumbnail}></View>
@@ -65,7 +66,7 @@ const App = () => {
                     <View style={styles.imageSliderThumbnail}></View>
                 </View>
                 <View style={styles.imageSliderHandle}></View>
-            </View>*/}
+            </View>
         </View>
     );
 }
