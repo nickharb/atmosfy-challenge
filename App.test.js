@@ -1,107 +1,57 @@
-import React, {Component, useState} from 'react';
-import {
-    StyleSheet,
-    Text,
-    View,
-    Image,
-    Button,
-    FlatList
-} from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, Text, View, Image, Button} from 'react-native';
 import Slider from '@react-native-community/slider';
 
-const IMAGES = [
-    {
-        id: 'frame0',
-        frame: 0,
-        source: require('./python/data/frame0.jpg'),
-    },
-    {
-        id: 'frame1',
-        frame: 1,
-        source: require('./python/data/frame1.jpg'),
-    },
-    {
-        id: 'frame2',
-        frame: 2,
-        source: require('./python/data/frame2.jpg'),
-    },
-    {
-        id: 'frame3',
-        frame: 3,
-        source: require('./python/data/frame3.jpg'),
-    },
-    {
-        id: 'frame4',
-        frame: 4,
-        source: require('./python/data/frame4.jpg'),
-    },
-    {
-        id: 'frame5',
-        frame: 5,
-        source: require('./python/data/frame5.jpg'),
-    },
-    {
-        id: 'frame6',
-        frame: 6,
-        source: require('./python/data/frame6.jpg'),
-    },
-    {
-        id: 'frame7',
-        frame: 7,
-        source: require('./python/data/frame7.jpg'),
-    },
-    {
-        id: 'frame8',
-        frame: 8,
-        source: require('./python/data/frame8.jpg'),
-    },
-    {
-        id: 'frame9',
-        frame: 9,
-        source: require('./python/data/frame9.jpg'),
-    },
-];
+import React, { Component } from 'react';
+import { Text } from 'react-native';
 
+Load_New_Image=()=>{
+    this.setState({
+        imageURL : 'https://reactnativecode.com/wp-content/uploads/2018/02/motorcycle.jpg'
+    })
+}
+
+function constructor() {
+    super();
+    this.state={
+        imageURL : 'https://reactnativecode.com/wp-content/uploads/2017/10/Guitar.jpg'
+    }
+}
 
 const App = () => {
-
     const [sliderValue, setSliderValue] = useState(0);
 
-    const PreviewImage = ({ source, frame }) => {
-        if (sliderValue == frame) {
-            return <Image style={styles.imagePreview} source={source} />;
-        } else {
-            return null;
-        }
-    }
-
-    const renderItem = ({ item }) => (
-        <PreviewImage key={item.id} source={item.source} frame={item.frame} />
-    );
-
+    const [status, setStatus] = React.useState({});
 
     return (
-
         <View style={styles.coverImageSelector}>
 
-            <FlatList
-                data={IMAGES}
-                renderItem={renderItem}
-                keyExtractor={props => props.id}
+            <Image
+                style={styles.imagePreview}
+                // source={require('./python/data/frame0.jpg')}
+                source = {{ uri: this.state.imageURL }}
             />
 
+            <Button title="Click Here To Load Image From Different Source" onPress={this.Load_New_Image} />
+
             <Text style={styles.instructionText}>To select a cover image, choose a frame from your video.</Text>
+
+            {/*Text to show slider value*/}
+            <Text style={{color: 'white'}}>
+                Value of slider is : {sliderValue}
+            </Text>
 
             {/*Slider with max, min, step and initial value*/}
             <Slider
                 style={styles.slider}
-                maximumValue={9} // TODO count the array
+                maximumValue={100}
                 minimumValue={0}
                 minimumTrackTintColor='blue'
                 maximumTrackTintColor='#000000'
                 step={1}
-                onValueChange={(value) => {
-                    setSliderValue(value)
+                value={sliderValue}
+                onValueChange={(sliderValue) => {
+                    setSliderValue(sliderValue)
                 }}
             />
             
@@ -125,6 +75,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         backgroundColor: '#111',
+        // backgroundColor: 'white',
         alignItems: 'center',
         justifyContent: 'center',
         padding: 10
@@ -138,11 +89,12 @@ const styles = StyleSheet.create({
         width: '90%'
     },
     imagePreview: {
-        width: 200,
-        height: 400,
+        flex: 1,
+        width: '60%',
+        backgroundColor: 'blue',
         marginTop: 40,
         marginBottom: 40,
-        borderRadius: 10,
+        borderRadius: 10
     },
     instructionText: {
         color: 'white',
