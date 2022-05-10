@@ -7,7 +7,13 @@ import {
     Button,
     FlatList
 } from 'react-native';
-import Slider from '@react-native-community/slider';
+import { Slider } from '@rneui/themed';
+
+// TODO
+// fix image handle
+// dynamic background thumbnails
+// image flashing
+// preload images
 
 const IMAGES = [
     {
@@ -91,29 +97,33 @@ const App = () => {
             />
 
             <Text style={styles.instructionText}>To select a cover image, choose a frame from your video.</Text>
-
-            {/*Slider with max, min, step and initial value*/}
-            <Slider
-                style={styles.slider}
-                maximumValue={9} // TODO count the array
-                minimumValue={0}
-                minimumTrackTintColor='blue'
-                maximumTrackTintColor='#000000'
-                step={1}
-                onValueChange={(value) => {
-                    setSliderValue(value)
-                }}
-            />
             
             <View style={styles.imageSlider}>
                 <View style={styles.thumbnailContainer}>
-                    <View style={styles.imageSliderThumbnail}></View>
-                    <View style={styles.imageSliderThumbnail}></View>
-                    <View style={styles.imageSliderThumbnail}></View>
-                    <View style={styles.imageSliderThumbnail}></View>
-                    <View style={styles.imageSliderThumbnail}></View>
+                    <Image style={styles.imageSliderThumbnail} source={require('./python/data/frame0.jpg')} />
+                    <Image style={styles.imageSliderThumbnail} source={require('./python/data/frame3.jpg')} />
+                    <Image style={styles.imageSliderThumbnail} source={require('./python/data/frame5.jpg')} />
+                    <Image style={styles.imageSliderThumbnail} source={require('./python/data/frame7.jpg')} />
+                    <Image style={styles.imageSliderThumbnail} source={require('./python/data/frame9.jpg')} />
                 </View>
-                <View style={styles.imageSliderHandle}></View>
+
+                <Slider
+                    maximumValue={9} // TODO count the array
+                    minimumValue={0}
+                    minimumTrackTintColor='blue'
+                    maximumTrackTintColor='#000000'
+                    trackStyle={{ height: 0, backgroundColor: 'transparent' }}
+                    thumbStyle={{height: 96, width: 54}}
+                    thumbProps={{
+                      children: (
+                        <Image style={styles.imageSliderHandle} source={require('./python/data/frame9.jpg')} />
+                      ),
+                    }}
+                    step={1}
+                    onValueChange={(value) => {
+                        setSliderValue(value)
+                    }}
+                />
             </View>
         </View>
     );
@@ -134,9 +144,6 @@ const styles = StyleSheet.create({
         width: 200,
         height: 320,
     },
-    slider: {
-        width: '90%'
-    },
     imagePreview: {
         width: 200,
         height: 400,
@@ -151,10 +158,12 @@ const styles = StyleSheet.create({
         marginBottom: 40
     },
     imageSlider: {
-        height: 100,
-        width: '90%'
+        width: '90%',
+        marginBottom: 40
     },
     thumbnailContainer: {
+        position: 'absolute',
+        top: -15,
         flexDirection: 'row',
         borderColor: 'black',
         borderWidth: 1,
@@ -162,12 +171,8 @@ const styles = StyleSheet.create({
         overflow: 'hidden'
     },
     imageSliderHandle: {
-        position: 'absolute',
-        top: -10,
-        left: 100,
-        height: 120,
-        width: 80,
-        backgroundColor: 'blue',
+        height: 96,
+        width: 54,
         borderColor: '#ccc',
         borderWidth: 3,
         borderRadius: 10
@@ -175,10 +180,7 @@ const styles = StyleSheet.create({
     imageSliderThumbnail: {
         flexDirection: 'row',
         flex: 1,
-        height: 100,
-        backgroundColor: 'black',
-        borderColor: 'red',
-        borderWidth: 1
+        height: 70
     }
 });
 
