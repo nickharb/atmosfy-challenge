@@ -11,7 +11,6 @@ import { Slider } from '@rneui/themed';
 
 // TODO
 // fix image handle
-// dynamic background thumbnails
 // image flashing
 // preload images
 
@@ -125,7 +124,7 @@ const App = () => {
                     thumbStyle={{ height: 96, width: 54 }}
                     thumbProps={{
                       children: (
-                        <Image style={styles.imageSliderHandle} source={require('./python/data/frame9.jpg')} />
+                        <Image style={styles.imageSliderHandle} source={IMAGES[sliderValue].source} />
                       ),
                     }}
                     onValueChange={(value) => {
