@@ -1,4 +1,4 @@
-import React, {Component, useState} from 'react';
+import React, {Component, useState, useEffect} from 'react';
 import {
     StyleSheet,
     Text,
@@ -69,6 +69,8 @@ const IMAGES = [
 ];
 
 
+
+
 const App = () => {
 
     const [sliderValue, setSliderValue] = useState(0);
@@ -85,6 +87,16 @@ const App = () => {
         <PreviewImage key={item.id} source={item.source} frame={item.frame} />
     );
 
+    const chooseThumbnails = (thumbnails) => {
+        let chosenThumbs = [];
+        let targetNum = 5;
+        let ceiling = Math.ceil(IMAGES.length/targetNum);
+        for (let i =0; i<IMAGES.length && chosenThumbs.length<targetNum; i+=ceiling) {
+            chosenThumbs.push(IMAGES[i]);
+        }
+        return chosenThumbs;
+    }
+
 
     return (
 
@@ -100,26 +112,22 @@ const App = () => {
             
             <View style={styles.imageSlider}>
                 <View style={styles.thumbnailContainer}>
-                    <Image style={styles.imageSliderThumbnail} source={require('./python/data/frame0.jpg')} />
-                    <Image style={styles.imageSliderThumbnail} source={require('./python/data/frame3.jpg')} />
-                    <Image style={styles.imageSliderThumbnail} source={require('./python/data/frame5.jpg')} />
-                    <Image style={styles.imageSliderThumbnail} source={require('./python/data/frame7.jpg')} />
-                    <Image style={styles.imageSliderThumbnail} source={require('./python/data/frame9.jpg')} />
+                    {chooseThumbnails(IMAGES).map((thumb) => (
+                        <Image style={styles.imageSliderThumbnail} key={thumb.id} source={thumb.source} />
+                    ))}
                 </View>
 
                 <Slider
-                    maximumValue={9} // TODO count the array
+                    maximumValue={IMAGES.length-1}
                     minimumValue={0}
-                    minimumTrackTintColor='blue'
-                    maximumTrackTintColor='#000000'
+                    step={1}
                     trackStyle={{ height: 0, backgroundColor: 'transparent' }}
-                    thumbStyle={{height: 96, width: 54}}
+                    thumbStyle={{ height: 96, width: 54 }}
                     thumbProps={{
                       children: (
                         <Image style={styles.imageSliderHandle} source={require('./python/data/frame9.jpg')} />
                       ),
                     }}
-                    step={1}
                     onValueChange={(value) => {
                         setSliderValue(value)
                     }}
