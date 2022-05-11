@@ -3,88 +3,17 @@ import {
     StyleSheet,
     Text,
     View,
-    Image,
-    Button,
-    FlatList
+    Image
 } from 'react-native';
+
 import { Slider } from '@rneui/themed';
-
-// TODO
-// fix image handle
-// image flashing
-// preload images
-
-const IMAGES = [
-    {
-        id: 'frame0',
-        frame: 0,
-        source: require('./python/data/frame0.jpg'),
-    },
-    {
-        id: 'frame1',
-        frame: 1,
-        source: require('./python/data/frame1.jpg'),
-    },
-    {
-        id: 'frame2',
-        frame: 2,
-        source: require('./python/data/frame2.jpg'),
-    },
-    {
-        id: 'frame3',
-        frame: 3,
-        source: require('./python/data/frame3.jpg'),
-    },
-    {
-        id: 'frame4',
-        frame: 4,
-        source: require('./python/data/frame4.jpg'),
-    },
-    {
-        id: 'frame5',
-        frame: 5,
-        source: require('./python/data/frame5.jpg'),
-    },
-    {
-        id: 'frame6',
-        frame: 6,
-        source: require('./python/data/frame6.jpg'),
-    },
-    {
-        id: 'frame7',
-        frame: 7,
-        source: require('./python/data/frame7.jpg'),
-    },
-    {
-        id: 'frame8',
-        frame: 8,
-        source: require('./python/data/frame8.jpg'),
-    },
-    {
-        id: 'frame9',
-        frame: 9,
-        source: require('./python/data/frame9.jpg'),
-    },
-];
-
-
+import IMAGES from './images/index.js';
+import ImagePreview from './components/ImagePreview';
 
 
 const App = () => {
 
     const [sliderValue, setSliderValue] = useState(0);
-
-    const PreviewImage = ({ source, frame }) => {
-        if (sliderValue == frame) {
-            return <Image style={styles.imagePreview} source={source} />;
-        } else {
-            return null;
-        }
-    }
-
-    const renderItem = ({ item }) => (
-        <PreviewImage key={item.id} source={item.source} frame={item.frame} />
-    );
 
     const chooseThumbnails = (thumbnails) => {
         let chosenThumbs = [];
@@ -96,16 +25,11 @@ const App = () => {
         return chosenThumbs;
     }
 
-
     return (
 
         <View style={styles.coverImageSelector}>
 
-            <FlatList
-                data={IMAGES}
-                renderItem={renderItem}
-                keyExtractor={props => props.id}
-            />
+            <ImagePreview sliderValue={sliderValue} />
 
             <Text style={styles.instructionText}>To select a cover image, choose a frame from your video.</Text>
             
@@ -123,9 +47,9 @@ const App = () => {
                     trackStyle={{ height: 0, backgroundColor: 'transparent' }}
                     thumbStyle={{ height: 96, width: 54 }}
                     thumbProps={{
-                      children: (
-                        <Image style={styles.imageSliderHandle} source={IMAGES[sliderValue].source} />
-                      ),
+                        children: (
+                            <Image style={styles.imageSliderHandle} source={IMAGES[sliderValue].source} />
+                        ),
                     }}
                     onValueChange={(value) => {
                         setSliderValue(value)
@@ -145,18 +69,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         padding: 10
-    },
-    video: {
-        alignSelf: 'center',
-        width: 200,
-        height: 320,
-    },
-    imagePreview: {
-        width: 200,
-        height: 400,
-        marginTop: 40,
-        marginBottom: 40,
-        borderRadius: 10,
     },
     instructionText: {
         color: 'white',
@@ -187,7 +99,8 @@ const styles = StyleSheet.create({
     imageSliderThumbnail: {
         flexDirection: 'row',
         flex: 1,
-        height: 70
+        height: 70,
+        opacity: 0.5
     }
 });
 
