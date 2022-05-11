@@ -1,4 +1,5 @@
-import React, {Component, useState, useEffect} from 'react';
+// import react and react native components
+import React, { Component, useState } from 'react';
 import {
     StyleSheet,
     Text,
@@ -6,6 +7,7 @@ import {
     Image
 } from 'react-native';
 
+// import slider, image data and image preview component
 import { Slider } from '@rneui/themed';
 import IMAGES from './images/index.js';
 import ImagePreview from './components/ImagePreview';
@@ -13,11 +15,13 @@ import ImagePreview from './components/ImagePreview';
 
 const App = () => {
 
+    // store the current frame from the slider
     const [sliderValue, setSliderValue] = useState(0);
 
+    // choose the slider thumbnail images
     const chooseThumbnails = (thumbnails) => {
         let chosenThumbs = [];
-        let targetNum = 5;
+        let targetNum = 5; // number of thumbnail images
         let ceiling = Math.ceil(IMAGES.length/targetNum);
         for (let i =0; i<IMAGES.length && chosenThumbs.length<targetNum; i+=ceiling) {
             chosenThumbs.push(IMAGES[i]);
@@ -29,10 +33,12 @@ const App = () => {
 
         <View style={styles.coverImageSelector}>
 
+            {/* main image preview element */}
             <ImagePreview sliderValue={sliderValue} />
 
             <Text style={styles.instructionText}>To select a cover image, choose a frame from your video.</Text>
             
+            {/* image slider element with preview image handle */}
             <View style={styles.imageSlider}>
                 <View style={styles.thumbnailContainer}>
                     {chooseThumbnails(IMAGES).map((thumb) => (
@@ -40,6 +46,7 @@ const App = () => {
                     ))}
                 </View>
 
+                {/* react native elements slider component */}
                 <Slider
                     maximumValue={IMAGES.length-1}
                     minimumValue={0}
@@ -48,10 +55,12 @@ const App = () => {
                     thumbStyle={{ height: 96, width: 54 }}
                     thumbProps={{
                         children: (
+                            // update the slider handle image source
                             <Image style={styles.imageSliderHandle} source={IMAGES[sliderValue].source} />
                         ),
                     }}
                     onValueChange={(value) => {
+                        // set current frame from slider value
                         setSliderValue(value)
                     }}
                 />
@@ -84,8 +93,6 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: -15,
         flexDirection: 'row',
-        borderColor: 'black',
-        borderWidth: 1,
         borderRadius: 10,
         overflow: 'hidden'
     },
