@@ -32,13 +32,13 @@ const App = () => {
 
     // choose the slider thumbnail images
     const chooseThumbnails = (duration) => {
-        let timeStamps = [];
+        let ts = [];
         let targetNum = 5; // number of thumbnail images
         let ceiling = Math.ceil(duration/targetNum);
-        for (let i = 0; i<duration && timeStamps.length<targetNum; i+=ceiling) {
-            timeStamps.push(i);
+        for (let i = 0; i<duration && ts.length<targetNum; i+=ceiling) {
+            ts.push(i);
         }
-        return timeStamps;
+        return ts;
     }
 
     return (
@@ -91,7 +91,6 @@ const App = () => {
         </View>
     );
 }
-
 
 const styles = StyleSheet.create({
     coverImageSelector: {

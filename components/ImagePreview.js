@@ -7,10 +7,10 @@ import {
     Text
 } from 'react-native';
 import { createThumbnail } from "react-native-create-thumbnail";
-import FastImage from 'react-native-fast-image';
 
 // main image preview element
 const ImagePreview = (props) => {
+
     const filePath = '/Users/nickharb/code/sandbox/2022/atmosfy-challenge/assets/test.mp4';
     const [imagePath, setImagePath] = useState('');
 
@@ -44,7 +44,8 @@ const ImagePreview = (props) => {
         createThumbnail({
                 url: filePath,
                 timeStamp: props.timeStamp,
-                dirSize: 1000
+                dirSize: 10000,
+                cacheName: props.type + '_' + props.timeStamp
             })
             .then(function(response) {
                 setImagePath(response.path)
