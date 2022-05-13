@@ -7,6 +7,7 @@ import {
     Text
 } from 'react-native';
 import { createThumbnail } from "react-native-create-thumbnail";
+import FastImage from 'react-native-fast-image';
 
 // main image preview element
 const ImagePreview = (props) => {
@@ -42,7 +43,8 @@ const ImagePreview = (props) => {
     const onScreenLoad = () => {
         createThumbnail({
                 url: filePath,
-                timeStamp: props.timeStamp
+                timeStamp: props.timeStamp,
+                dirSize: 1000
             })
             .then(function(response) {
                 setImagePath(response.path)

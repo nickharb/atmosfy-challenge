@@ -19,12 +19,12 @@ const App = () => {
 
     const imageWidth = 200;
     const videoDuration = 10000;
-    const timeStampInterval = 50;
+    const timeStampInterval = 1000;
 
     // choose timestamps to create thumbnails
     const chooseTimestamps = (duration) => {
         let timeStamps = [];
-        for (let i = 1; i < duration; i+=timeStampInterval) {
+        for (let i = 0; i < duration; i+=timeStampInterval) {
             timeStamps.push(i)
         }
         return timeStamps;
@@ -35,7 +35,7 @@ const App = () => {
         let timeStamps = [];
         let targetNum = 5; // number of thumbnail images
         let ceiling = Math.ceil(duration/targetNum);
-        for (let i = 1; i<duration && timeStamps.length<targetNum; i+=ceiling) {
+        for (let i = 0; i<duration && timeStamps.length<targetNum; i+=ceiling) {
             timeStamps.push(i);
         }
         return timeStamps;
@@ -72,14 +72,14 @@ const App = () => {
                 {/* react native elements slider component */}
                 <Slider
                     maximumValue={videoDuration/timeStampInterval-1}
-                    minimumValue={1}
+                    minimumValue={0}
                     step={1}
                     trackStyle={{ height: 0, backgroundColor: 'transparent' }}
-                    thumbStyle={{ height: 96, width: 54 }}
+                    thumbStyle={{ height: 96, width: 54, backgroundColor: 'transparent' }}
                     thumbProps={{
                         children: (
                             // update the slider handle image source
-                            <ImagePreview type={'handle'} thumbnail={true} timeStamp={1} key={1} />
+                            <ImagePreview type={'handle'} timeStamp={0} key={0} />
                         )
                     }}
                     onValueChange={(value) => {
