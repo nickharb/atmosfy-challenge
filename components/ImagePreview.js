@@ -59,7 +59,7 @@ const ImagePreview = (props) => {
     }, [])
 
     return (
-        <Image style={getStyle()} key={imagePath} source={{ uri: imagePath }} />
+        <Image style={getStyle()} key={imagePath} source={imagePath ? {uri: imagePath } : null} />
     );
 }
 
