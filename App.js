@@ -1,32 +1,44 @@
 // import react and react native components
-import React, { Component, useState } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import {
     StyleSheet,
     Text,
     View,
-    Image
+    Image,
+    Button
 } from 'react-native';
 
-// import slider, image data and image preview component
+// import slider and image preview component
 import { Slider } from '@rneui/themed';
-import IMAGES from './images/index.js';
 import ImagePreview from './components/ImagePreview';
-
 
 const App = () => {
 
     // store the current frame from the slider
     const [sliderValue, setSliderValue] = useState(0);
 
-    // choose the slider thumbnail images
-    const chooseThumbnails = (thumbnails) => {
-        let chosenThumbs = [];
-        let targetNum = 5; // number of thumbnail images
-        let ceiling = Math.ceil(IMAGES.length/targetNum);
-        for (let i =0; i<IMAGES.length && chosenThumbs.length<targetNum; i+=ceiling) {
-            chosenThumbs.push(IMAGES[i]);
+    const imageWidth = 200;
+    const videoDuration = 10000;
+    const timeStampInterval = 50;
+
+    // choose timestamps to create thumbnails
+    const chooseTimestamps = (duration) => {
+        let timeStamps = [];
+        for (let i = 1; i < duration; i+=timeStampInterval) {
+            timeStamps.push(i)
         }
-        return chosenThumbs;
+        return timeStamps;
+    }
+
+    // choose the slider thumbnail images
+    const chooseThumbnails = (duration) => {
+        let timeStamps = [];
+        let targetNum = 5; // number of thumbnail images
+        let ceiling = Math.ceil(duration/targetNum);
+        for (let i = 1; i<duration && timeStamps.length<targetNum; i+=ceiling) {
+            timeStamps.push(i);
+        }
+        return timeStamps;
     }
 
     return (
@@ -34,30 +46,41 @@ const App = () => {
         <View style={styles.coverImageSelector}>
 
             {/* main image preview element */}
-            <ImagePreview sliderValue={sliderValue} />
+            <View style={styles.imagePreviewViewport}>
+                {/* as the slider updates, translate preview list */}
+                <View style={[styles.imagePreviewList, {
+                    transform: [
+                        { translateX: -sliderValue*imageWidth }
+                    ]
+                }]}>
+                    {chooseTimestamps(videoDuration).map((time) => (
+                        <ImagePreview type={'preview'} timeStamp={time} key={time} />
+                    ))}
+                </View>
+            </View>
 
             <Text style={styles.instructionText}>To select a cover image, choose a frame from your video.</Text>
             
             {/* image slider element with preview image handle */}
             <View style={styles.imageSlider}>
                 <View style={styles.thumbnailContainer}>
-                    {chooseThumbnails(IMAGES).map((thumb) => (
-                        <Image style={styles.imageSliderThumbnail} key={thumb.id} source={thumb.source} />
+                    {chooseThumbnails(videoDuration).map((time) => (
+                        <ImagePreview type={'thumbnail'} timeStamp={time} key={time} />
                     ))}
                 </View>
 
                 {/* react native elements slider component */}
                 <Slider
-                    maximumValue={IMAGES.length-1}
-                    minimumValue={0}
+                    maximumValue={videoDuration/timeStampInterval-1}
+                    minimumValue={1}
                     step={1}
                     trackStyle={{ height: 0, backgroundColor: 'transparent' }}
                     thumbStyle={{ height: 96, width: 54 }}
                     thumbProps={{
                         children: (
                             // update the slider handle image source
-                            <Image style={styles.imageSliderHandle} source={IMAGES[sliderValue].source} />
-                        ),
+                            <ImagePreview type={'handle'} thumbnail={true} timeStamp={1} key={1} />
+                        )
                     }}
                     onValueChange={(value) => {
                         // set current frame from slider value
@@ -79,6 +102,16 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         padding: 10
     },
+    imagePreviewViewport: {
+        width: 200,
+        height: 300,
+        overflow: 'hidden',
+        borderRadius: 10,
+        marginBottom: 40
+    },
+    imagePreviewList: {
+        flexDirection: 'row'
+    },
     instructionText: {
         color: 'white',
         textAlign: 'center',
@@ -95,19 +128,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         borderRadius: 10,
         overflow: 'hidden'
-    },
-    imageSliderHandle: {
-        height: 96,
-        width: 54,
-        borderColor: '#ccc',
-        borderWidth: 3,
-        borderRadius: 10
-    },
-    imageSliderThumbnail: {
-        flexDirection: 'row',
-        flex: 1,
-        height: 70,
-        opacity: 0.5
     }
 });
 

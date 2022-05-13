@@ -1,51 +1,68 @@
+// import react and react native components
+import React, { Component, useState, useEffect } from 'react';
 import {
     StyleSheet,
     View,
-    Image
+    Image,
+    Text
 } from 'react-native';
-import IMAGES from '../images/index.js';
-
-// width of main preview element
-const imageWidth = 200;
+import { createThumbnail } from "react-native-create-thumbnail";
 
 // main image preview element
 const ImagePreview = (props) => {
+    const filePath = '/Users/nickharb/code/sandbox/2022/atmosfy-challenge/assets/test.mp4';
+    const [imagePath, setImagePath] = useState('');
+
+    // conditional style based on component type
+    const getStyle = () => {
+        if (props.type == 'thumbnail') {
+            return {
+                flexDirection: 'row',
+                flex: 1,
+                height: 70,
+                opacity: 0.5
+            };
+        } else if (props.type == 'handle') {
+            return {
+                height: 96,
+                width: 54,
+                borderColor: '#ccc',
+                borderWidth: 3,
+                borderRadius: 10
+            };
+        } else {
+            return {
+                width: 200,
+                height: 300
+            };
+        }
+    }
+
+    // generate thumbnails from video
+    const onScreenLoad = () => {
+        createThumbnail({
+                url: filePath,
+                timeStamp: props.timeStamp
+            })
+            .then(function(response) {
+                setImagePath(response.path)
+            })
+            .catch(err => console.log({ err }));
+    }
+
+    // wait for mount before rendering
+    useEffect(() => {
+        onScreenLoad();
+    }, [])
+
     return (
-        // viewport displays one image at a time
-        <View style={styles.imagePreviewViewport}>
-            {/* as the slider updates, translate preview list */}
-            <View style={[styles.imagePreviewList, {
-                transform: [
-                    { translateX: -props.sliderValue*imageWidth }
-                ]
-            }]}>
-                {/* load all images in a row */}
-                {IMAGES.map((thumb) => (
-                    <Image style={styles.imagePreview} key={thumb.id} source={thumb.source} />
-                ))}
-            </View>
-        </View>
+        <Image style={getStyle()} key={imagePath} source={{ uri: imagePath }} />
     );
 }
 
 export default ImagePreview;
 
-const styles = StyleSheet.create({
-    imagePreviewViewport: {
-        width: 200,
-        height: 300,
-        overflow: 'hidden',
-        borderRadius: 10,
-        marginBottom: 40
-    },
-    imagePreviewList: {
-        flexDirection: 'row'
-    },
-    imagePreview: {
-        width: 200,
-        height: 300
-    }
-});
+
 
 
 
